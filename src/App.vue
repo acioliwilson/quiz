@@ -7,18 +7,28 @@
     </div>
 
     <div v-else-if="stage === 'level1'" class="text-center">
-      <h2 class="h1 text-white">Nível 1: Encontre o Coração</h2>
-      <p class="text-white mt-3">Clique no coração para continuar!</p>
+      <h2 class="h1 text-white">Nível 1: Geolocalização</h2>
+      <p class="text-white mt-3">Escolha a opção correta:</p>
+      <p class="text-white mt-1">Qual a capital do estado de São Paulo?</p>
       <div class="d-grid gap-2 mt-4" style="grid-template-columns: repeat(3, 1fr);">
         <button 
-          v-for="(item, index) in items"
-          :key="index"
-          @click="itemClicked(index)"
-          class="btn btn-lg rounded-circle"
-          :class="item ? 'btn-danger' : 'btn-light'"
+          @click="stateClicked1()"
+          class="btn btn-lg btn-light"
         >
-          <span v-if="item">❤️</span>
+          <span>Caraguatatuba</span>
         </button>
+        <button 
+          @click="stateClicked2()"
+          class="btn btn-lg btn-light"
+        >
+          <span>São Paulo</span>
+        </button>
+        <br />
+        <div class="w-100 mt-3" style="width: 100%; display: block; text-align: center;" v-if="error">
+          <div class="btn bg-danger text-light">
+            Resposta errada! Tente novamente!
+          </div>
+        </div>
       </div>
     </div>
 
@@ -61,6 +71,7 @@ export default {
       items: Array.from({ length: 9 }, (_, i) => i === Math.floor(Math.random() * 9)),
       stars: Array.from({ length: 3 }, () => ({ x: createRandomPosition(160), y: createRandomPosition(160) })),
       capturedStars: 0,
+      error: null,
     };
   },
   methods: {
@@ -69,9 +80,15 @@ export default {
       const currentIndex = stages.indexOf(this.stage);
       this.stage = stages[currentIndex + 1] || 'start';
     },
-    itemClicked(index) {
-      if (this.items[index]) this.nextStage();
-      else alert('Tente novamente!');
+    // itemClicked(index) {
+    //   if (this.items[index]) this.nextStage();
+    //   else alert('Tente novamente!');
+    // },
+    stateClicked1() {
+      this.error = !this.error
+    },
+    stateClicked2() {
+      this.nextStage();
     },
     captureStar(index) {
       this.stars.splice(index, 1);
